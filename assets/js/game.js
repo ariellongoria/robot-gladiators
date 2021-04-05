@@ -1,22 +1,35 @@
-var fight = function (enemy) {
-    while (enemy.health > 0 && playerInfo.health > 0) {
-        var promptFight = window.prompt(
-            "Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose."
+var fightOrSkip = function() {
+    var promptFight = window.prompt(
+        "Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose."
+    ).toLowerCase();
+
+    if (promptFight === "" || promptFight === null){
+        window.alert("You need to provide a valid answer! Please try again.");
+        return fightOrSkip();
+    }
+
+    if (promptFight === "skip") {
+        var confirmSkip = window.confirm(
+            "Are you sure you'd like to quit?"
         );
 
-        if (promptFight === "SKIP" || promptFight === "skip") {
-            var confirmSkip = window.confirm(
-                "Are you sure you'd like to quit?"
+        if (confirmSkip) {
+            window.alert(
+                playerInfo.name + " has chosen to skip the fight!"
             );
+            playerInfo.money = Math.max(0, playerInfo.money - 10);
+            console.log("playerInfo.money", playerInfo.money);
+            return true;
+        }
+    }
+    return false;
+}
 
-            if (confirmSkip) {
-                window.alert(
-                    playerInfo.name + " has chosen to skip the fight!"
-                );
-                playerInfo.money = Math.max(0, playerInfo.money - 10);
-                console.log("playerInfo.money", playerInfo.money);
-                break;
-            }
+var fight = function (enemy) {
+    while (enemy.health > 0 && playerInfo.health > 0) {
+        
+        if (fightOrSkip()){
+            break;
         }
 
         var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
@@ -81,7 +94,7 @@ var startGame = function () {
             pickedEnemyObj.health = randomNumber(40, 60);
             fight(pickedEnemyObj);
 
-            if (playerInfo.health > 0 && i < enemyNames.length - 1) {
+            if (playerInfo.health > 0 && i < enemyInfo.length - 1) {
                 var storeConfirm = window.confirm(
                     "The fight is over, visit the store before the next round?"
                 );
@@ -128,16 +141,13 @@ var shop = function () {
             break;
         case "UPGRADE":
         case "upgrade":
-            playerIngo.upgradeAttack();
+            playerInfo.upgradeAttack();
             break;
         case "LEAVE":
         case "leave":
-            if (playerInfo.money >= 7) {
                 window.alert("Leaving the store.");
                 break;
-            } else {
-                window.alert("you don't have enough money!");
-            }
+
         default:
             window.alert("You did not pick a valid option. Try again.");
             shop();
