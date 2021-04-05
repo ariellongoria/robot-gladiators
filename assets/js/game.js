@@ -1,9 +1,3 @@
-for (var i = 0; i < enemyNames.length; i++) {
-    console.log(enemyNames[i]);
-    console.log(i);
-    console.log(enemyNames[i] + " is at " + i + " index.");
-}
-
 var fight = function (enemy) {
     while (enemy.health > 0 && playerInfo.health > 0) {
         var promptFight = window.prompt(
@@ -156,8 +150,19 @@ var randomNumber = function (min, max) {
     return value;
 };
 
+var getPlayerName = function(){
+    var name = "";
+
+    while (name === "" || name === null){
+        name = prompt("What is your robot's name?")
+    }
+
+    console.log("You robot's name is " + name);
+    return name;
+};
+
 var playerInfo = {
-    name: window.prompt("What is your robot's name?"),
+    name: getPlayerName(),
     health: 100,
     attack: 10,
     money: 10,
